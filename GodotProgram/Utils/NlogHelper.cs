@@ -15,7 +15,7 @@ namespace GodotProgram.Utils
 
         public NlogHelper()
         {
-            var url = string.Format("{0}Assests/NLog.config", AppDomain.CurrentDomain.BaseDirectory.ToString());
+            var url = string.Format("{0}Assets/NLog.config", AppDomain.CurrentDomain.BaseDirectory.ToString());
             GD.Print($"Nlog加载完毕，url地址为[{url}]");
             LogManager.Configuration = new XmlLoggingConfiguration(url);
 

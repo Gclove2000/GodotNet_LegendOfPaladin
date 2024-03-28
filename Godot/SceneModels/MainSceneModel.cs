@@ -64,7 +64,7 @@ namespace GodotNet_LegendOfPaladin.SceneModels
                 .ToList();
             foreach (var item in selectLists)
             {
-                GD.Print(JsonConvert.SerializeObject(item));
+                nlogHelper.Debug(JsonConvert.SerializeObject(item));
             }
         }
     }

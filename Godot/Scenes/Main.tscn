@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://ck5xkc7re4lis"]
+[gd_scene load_steps=4 format=3 uid="uid://ck5xkc7re4lis"]
 
 [ext_resource type="Script" path="res://SceneScripts/MainScene.cs" id="1_ncewo"]
+[ext_resource type="PackedScene" uid="uid://7l6gpknmfqvs" path="res://Scenes/Backgroud.tscn" id="2_77e7r"]
+[ext_resource type="PackedScene" uid="uid://bowatcyem8fxe" path="res://Scenes/Player.tscn" id="3_g5yhf"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_ncewo")
+
+[node name="Backgroud" parent="." instance=ExtResource("2_77e7r")]
+position = Vector2(152, 52)
+
+[node name="Player" parent="." instance=ExtResource("3_g5yhf")]
+position = Vector2(59, 61)

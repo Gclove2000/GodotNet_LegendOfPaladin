@@ -1,9 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://bowatcyem8fxe"]
 
 [ext_resource type="Texture2D" uid="uid://cx7kddortoelf" path="res://Assets/generic_char_v0.2/png/blue/char_blue_1.png" id="1_up0x6"]
+[ext_resource type="Script" path="res://SceneScripts/PlayerScene.cs" id="1_xdnxy"]
 
-[sub_resource type="Animation" id="Animation_myvvj"]
-resource_name = "idle"
+[sub_resource type="Animation" id="Animation_rpsv0"]
+resource_name = "idel"
 length = 0.6
 loop_mode = 1
 tracks/0/type = "value"
@@ -25,10 +26,10 @@ tracks/1/path = NodePath("Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3, 4, 5]
+"values": [0, 1, 2, 3, 4, 5, 5]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -43,7 +44,7 @@ tracks/2/keys = {
 "values": [6]
 }
 
-[sub_resource type="Animation" id="Animation_jedl5"]
+[sub_resource type="Animation" id="Animation_maotb"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -67,7 +68,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [1]
+"values": [0]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -82,28 +83,27 @@ tracks/2/keys = {
 "values": [6]
 }
 
-[sub_resource type="Animation" id="Animation_6aadu"]
-resource_name = "running"
-length = 0.8
-loop_mode = 1
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1l7c2"]
 _data = {
-"RESET": SubResource("Animation_jedl5"),
-"idle": SubResource("Animation_myvvj"),
-"running": SubResource("Animation_6aadu")
+"RESET": SubResource("Animation_maotb"),
+"idel": SubResource("Animation_rpsv0")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tbifb"]
 size = Vector2(11.5, 31.5)
 
 [node name="Player" type="Node2D"]
+script = ExtResource("1_xdnxy")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "test"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -29)
 texture = ExtResource("1_up0x6")
 hframes = 6
-frame = 1
 region_enabled = true
 region_rect = Rect2(0, 0, 336, 56)
 

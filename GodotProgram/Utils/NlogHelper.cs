@@ -22,6 +22,11 @@ namespace GodotProgram.Utils
             logger = NLog.LogManager.GetCurrentClassLogger();
         }
 
+
+        /// <summary>
+        /// 因为Debug太多了，所
+        /// </summary>
+        /// <param name="msg"></param>
         public void Debug(string msg)
         {
             GD.Print(msg);

@@ -37,6 +37,7 @@ namespace GodotNet_LegendOfPaladin.Utils
         private void Load()
         {
             AddItem(nameof(MainScene));
+            AddItem(nameof(PlayerScene));
         }
 
         private void AddItem(string sceneName)

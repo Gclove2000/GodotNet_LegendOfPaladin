@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://7l6gpknmfqvs"]
+[gd_scene load_steps=5 format=3 uid="uid://7l6gpknmfqvs"]
 
+[ext_resource type="Script" path="res://SceneScripts/BackgroudScene.cs" id="1_sy3m0"]
 [ext_resource type="Texture2D" uid="uid://jonecgf6jhao" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Assets/Tree-Assets.png" id="1_t2sm5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_btsdq"]
@@ -1126,6 +1127,7 @@ terrain_set_0/terrain_0/color = Color(0.184314, 0.392157, 0.619608, 1)
 sources/0 = SubResource("TileSetAtlasSource_btsdq")
 
 [node name="Backgroud" type="Node2D"]
+script = ExtResource("1_sy3m0")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_pbm44")

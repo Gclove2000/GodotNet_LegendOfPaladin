@@ -37,6 +37,7 @@ namespace GodotNet_LegendOfPaladin
             builder.AddSingleton<NlogHelper>();
             builder.AddSingleton<FreeSqlHelper>();
             builder.AddSingleton<PackedSceneHelper>();
+            builder.AddSingleton<GodotProjectSettingHelper>();
         }
         /// <summary>
         /// 添加SceneModel，应以Transient添加
@@ -45,6 +46,8 @@ namespace GodotNet_LegendOfPaladin
         public static void AddSceneModel(ServiceCollection builder)
         {
             builder.AddTransient<MainSceneModel>();
+            builder.AddTransient<PlayerSceneModel>();
+            builder.AddTransient<BackgroundSceneModel>();
         }
     }
 }

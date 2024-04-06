@@ -6,9 +6,10 @@
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_ncewo")
+metadata/_edit_horizontal_guides_ = [278.0]
 
 [node name="Backgroud" parent="." instance=ExtResource("2_77e7r")]
 position = Vector2(152, 52)
 
 [node name="Player" parent="." instance=ExtResource("3_g5yhf")]
-position = Vector2(59, 61)
+position = Vector2(148, 132)

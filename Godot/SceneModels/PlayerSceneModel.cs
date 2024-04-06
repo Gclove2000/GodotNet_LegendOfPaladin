@@ -53,6 +53,9 @@ namespace GodotNet_LegendOfPaladin.SceneModels
 
         private Sprite2D sprite2D;
 
+        private Camera2D camera2D;
+
+
         public override void Ready()
         {
 
@@ -63,7 +66,9 @@ namespace GodotNet_LegendOfPaladin.SceneModels
             sprite2D = this.Sence.GetNode<Sprite2D>("Sprite2D");
             //播放动画
             animationPlayer.Play(AnimationFlame.idel.ToString());
-
+            //设置相机
+            camera2D = this.Sence.GetNode<Camera2D>("Camera2D");
+            
 
         }
         #endregion
@@ -126,7 +131,6 @@ namespace GodotNet_LegendOfPaladin.SceneModels
             var postion = characterBody2D.Position;
             characterBody2D.Position = new Vector2(0, 0);
             this.Sence.Position += postion;
-
             animationPlayer.Play(animation.ToString());
         }
     }

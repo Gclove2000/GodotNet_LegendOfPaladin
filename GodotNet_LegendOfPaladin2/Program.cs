@@ -35,6 +35,8 @@ namespace GodotNet_LegendOfPaladin2
             builder.AddSingleton<NlogHelper>();
             builder.AddSingleton<MainSceneModel>();
             builder.AddSingleton<FreeSqlHelper>();
+            builder.AddSingleton<PlayerSceneModel>();
+            builder.AddSingleton<BackGorundSceneModel>();
         }
         /// <summary>
         /// 添加SceneModel，应以Transient添加

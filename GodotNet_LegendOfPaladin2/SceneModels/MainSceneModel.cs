@@ -1,4 +1,5 @@
 ﻿using GodotNet_LegendOfPaladin2.DB;
+using GodotNet_LegendOfPaladin2.SceneScripts;
 using GodotNet_LegendOfPaladin2.Utils;
 using Newtonsoft.Json;
 using System;
@@ -14,6 +15,9 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         private PrintHelper printHelper;
 
         private FreeSqlHelper freeSqlHelper;
+
+        private PlayerScene playerScene;
+        private BackGroundScene backGroundScene;
 
         public MainSceneModel(PrintHelper printHelper, FreeSqlHelper freeSqlHelper)
         {
@@ -32,6 +36,9 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
             printHelper.Debug("主场景加载完成");
 
+            playerScene = Scene.GetNode<PlayerScene>("Player");
+            backGroundScene = Scene.GetNode<BackGroundScene>("BackGround");
+            playerScene.Model.SetCameraLimit(backGroundScene.Model.TileMapSize);
         }
     }
 }

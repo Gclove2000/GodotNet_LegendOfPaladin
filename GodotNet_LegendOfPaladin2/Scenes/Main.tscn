@@ -10,4 +10,4 @@ script = ExtResource("1_2mofd")
 [node name="BackGround" parent="." instance=ExtResource("2_cvdpa")]
 
 [node name="Player" parent="." instance=ExtResource("3_6yhyy")]
-position = Vector2(108, 73)
+position = Vector2(30, 200)

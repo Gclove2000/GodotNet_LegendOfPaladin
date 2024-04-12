@@ -1,5 +1,6 @@
 ﻿using Godot;
 using GodotNet_LegendOfPaladin2.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         private CharacterBody2D characterBody2D;
 
         private AnimationPlayer animationPlayer;
+
+        private Camera2D camera2D;
 
         public enum AnimationEnum {  REST,Idel,Running,Jump}
 
@@ -77,9 +80,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
             characterBody2D.Velocity = velocity;
             characterBody2D.MoveAndSlide();
-            var distance = characterBody2D.Position;
-            characterBody2D.Position = new Vector2(0, 0);
-            Scene.Position += distance;
+
         }
         private void PlayAnimation(AnimationEnum animationEnum)
         {
@@ -88,11 +89,21 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
         public override void Ready()
         {
-            sprite2D = Scene.GetNode<Sprite2D>("Sprite2D");
             characterBody2D = Scene.GetNode<CharacterBody2D>("CharacterBody2D");
-            animationPlayer = Scene.GetNode<AnimationPlayer>("AnimationPlayer");
+            camera2D = characterBody2D.GetNode<Camera2D>("Camera2D");
+            sprite2D = characterBody2D.GetNode<Sprite2D>("Sprite2D");
+            animationPlayer = characterBody2D.GetNode<AnimationPlayer>("AnimationPlayer");
             printHelper.Debug("加载完成");
             PlayAnimation(AnimationEnum.Idel);
+        }
+
+        public void SetCameraLimit(Rect2 rect2)
+        {
+            camera2D.LimitLeft = (int)rect2.Position.X;
+            //camera2D.LimitTop = (int)rect2.Position.Y;
+            camera2D.LimitRight = (int)rect2.End.X;
+            camera2D.LimitBottom = (int)rect2.End.Y;
+            printHelper.Debug(JsonConvert.SerializeObject(rect2));
         }
     }
 }

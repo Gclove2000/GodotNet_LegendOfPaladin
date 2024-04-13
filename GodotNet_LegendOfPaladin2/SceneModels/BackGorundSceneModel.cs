@@ -32,7 +32,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
             tileMap = Scene.GetNode<TileMap>("TileMap");
 
             var tileMapSize = tileMap.TileSet.TileSize;
-            var tileMapReact = tileMap.GetUsedRect();
+            var tileMapReact = tileMap.GetUsedRect().Grow(-1);
             
 
 

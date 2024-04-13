@@ -99,11 +99,14 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
         public void SetCameraLimit(Rect2 rect2)
         {
+
+
+
             camera2D.LimitLeft = (int)rect2.Position.X;
             //camera2D.LimitTop = (int)rect2.Position.Y;
             camera2D.LimitRight = (int)rect2.End.X;
             camera2D.LimitBottom = (int)rect2.End.Y;
-            printHelper.Debug(JsonConvert.SerializeObject(rect2));
+            //printHelper.Debug(JsonConvert.SerializeObject(rect2));
         }
     }
 }

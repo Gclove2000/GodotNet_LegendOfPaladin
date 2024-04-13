@@ -20,6 +20,7 @@ namespace GodotNet_LegendOfPaladin2.Utils
                 .UseConnectionString(FreeSql.DataType.Sqlite, connectStr)//数据库连接地址
                 .UseAutoSyncStructure(true)//DbFirst模式
                 .Build();
+            
         }
     }
 }

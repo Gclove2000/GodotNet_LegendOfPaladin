@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "GodotNet_LegendOfPaladin2": {
+      "commandName": "Project"
+    },
+    "配置文件 1": {
+      "commandName": "Executable",
+      "executablePath": "E:\\Godots\\4.2.1\\Godot_v4.2.1-stable_mono_win64\\Godot_v4.2.1-stable_mono_win64\\Godot_v4.2.1-stable_mono_win64.exe",
+      "commandLineArgs": "--path . --verbose",
+      "workingDirectory": ".",
+      "nativeDebugging": true
+    }
+  }
+}

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Godot.TextServer;
 
 namespace GodotNet_LegendOfPaladin2.SceneModels
 {
@@ -38,8 +39,13 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
         private Camera2D camera2D;
 
-        public enum AnimationEnum {  REST,Idel,Running,Jump}
+        public enum AnimationEnum { REST, Idel, Running, Jump, Fall, Land }
 
+        public AnimationEnum AnimationState { get; private set; }
+
+        public bool IsLand { get; private set; } = true;
+
+        public float Direction { get; private set; } = 0;
 
         public PlayerSceneModel(PrintHelper printHelper)
         {
@@ -52,57 +58,99 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         public override void Process(double delta)
         {
             PlayerMove(delta);
+
+            SetAnimation();
         }
 
+        /// <summary>
+        /// 角色移动
+        /// </summary>
+        /// <param name="delta"></param>
         private void PlayerMove(double delta)
         {
             var velocity = characterBody2D.Velocity;
             velocity.Y += ProjectSettingHelper.Gravity * (float)delta;
-            var direction = Input.GetAxis(ProjectSettingHelper.InputMapEnum.move_left.ToString(),
+            Direction = Input.GetAxis(ProjectSettingHelper.InputMapEnum.move_left.ToString(),
                 ProjectSettingHelper.InputMapEnum.move_right.ToString());
             //原本直接赋值
             //velocity.X = direction*RUN_SPEED;
             //现在使用加速度
-            velocity.X = Mathf.MoveToward(velocity.X, direction * RUN_SPEED, ACCELERATION);
+            velocity.X = Mathf.MoveToward(velocity.X, Direction * RUN_SPEED, ACCELERATION);
+
             if (characterBody2D.IsOnFloor() && Input.IsActionJustPressed(ProjectSettingHelper.InputMapEnum.jump.ToString()))
             {
                 velocity.Y = JUMP_SPEED;
-                PlayAnimation(AnimationEnum.Jump);
-
+                AnimationState = AnimationEnum.Jump;
             }
-
-            if (characterBody2D.IsOnFloor())
-            {
-                if (Mathf.IsZeroApprox(direction))
-                {
-                    PlayAnimation(AnimationEnum.Idel);
-                }
-                else
-                {
-                    PlayAnimation(AnimationEnum.Running);
-                }
-            }
-            else
-            {
-                PlayAnimation(AnimationEnum.Jump);
-            }
-
-            if (!Mathf.IsZeroApprox(direction))
-            {
-                sprite2D.FlipH = direction < 0;
-            }
-
-
-
             characterBody2D.Velocity = velocity;
             characterBody2D.MoveAndSlide();
 
         }
-        private void PlayAnimation(AnimationEnum animationEnum)
+
+        private void SetAnimation()
         {
-            animationPlayer.Play(animationEnum.ToString());
+            switch (AnimationState)
+            {
+                case AnimationEnum.Idel:
+                    if (!Mathf.IsZeroApprox(Direction))
+                    {
+                        AnimationState = AnimationEnum.Running;
+                    }
+                    break;
+                case AnimationEnum.Jump:
+                    if (characterBody2D.Velocity.Y < 0)
+                    {
+                        AnimationState = AnimationEnum.Fall;
+
+                    }
+                    break;
+                case AnimationEnum.Running:
+                    if (Mathf.IsZeroApprox(Direction))
+                    {
+                        AnimationState = AnimationEnum.Idel;
+                    }
+                    break;
+                case AnimationEnum.Fall:
+                    if (Mathf.IsZeroApprox(characterBody2D.Velocity.Y))
+                    {
+                        AnimationState = AnimationEnum.Land;
+                        //开启异步任务，如果过了400毫秒，仍然是Land，则转为Idel
+                        Task.Run(async () =>
+                        {
+                            await Task.Delay(400);
+                            if (AnimationState == AnimationEnum.Land)
+                            {
+                                AnimationState = AnimationEnum.Idel;
+
+                            }
+                        });
+                    }
+                    break;
+                case AnimationEnum.Land:
+
+                    break;
+            }
+
+            if (!Mathf.IsZeroApprox(Direction))
+            {
+                sprite2D.FlipH = Direction < 0;
+            }
+            PlayAnimation();
         }
 
+        /// <summary>
+        /// 播放动画
+        /// </summary>
+        private void PlayAnimation()
+        {
+            //printHelper.Debug(AnimationState.ToString());
+
+            animationPlayer.Play(AnimationState.ToString());
+        }
+
+        /// <summary>
+        /// 是否准备好了
+        /// </summary>
         public override void Ready()
         {
             characterBody2D = Scene.GetNode<CharacterBody2D>("CharacterBody2D");
@@ -110,9 +158,14 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
             sprite2D = characterBody2D.GetNode<Sprite2D>("Sprite2D");
             animationPlayer = characterBody2D.GetNode<AnimationPlayer>("AnimationPlayer");
             printHelper.Debug("加载完成");
-            PlayAnimation(AnimationEnum.Idel);
+            AnimationState = AnimationEnum.Idel;
+            PlayAnimation();
         }
 
+        /// <summary>
+        /// 设置相机
+        /// </summary>
+        /// <param name="rect2"></param>
         public void SetCameraLimit(Rect2 rect2)
         {
 

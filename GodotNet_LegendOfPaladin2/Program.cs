@@ -45,6 +45,7 @@ namespace GodotNet_LegendOfPaladin2
         public static void AddTransient(ServiceCollection builder)
         {
             builder.AddTransient<PrintHelper>();
+            builder.AddTransient<EnemySceneModel>();
         }
     }
 

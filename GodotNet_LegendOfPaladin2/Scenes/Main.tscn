@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dh2yf051xi26i"]
+[gd_scene load_steps=5 format=3 uid="uid://dh2yf051xi26i"]
 
 [ext_resource type="Script" path="res://SceneScripts/MainScene.cs" id="1_2mofd"]
 [ext_resource type="PackedScene" uid="uid://dy8i4mmh7njoa" path="res://Scenes/BackGround.tscn" id="2_cvdpa"]
 [ext_resource type="PackedScene" uid="uid://coyqvkstq7wgv" path="res://Scenes/Player.tscn" id="3_6yhyy"]
+[ext_resource type="PackedScene" uid="uid://blkgl3tmxulq2" path="res://Scenes/Enemies/Enemy.tscn" id="4_eph5x"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_2mofd")
@@ -11,3 +12,5 @@ script = ExtResource("1_2mofd")
 
 [node name="Player" parent="." instance=ExtResource("3_6yhyy")]
 position = Vector2(50, 182)
+
+[node name="Enemy" parent="." instance=ExtResource("4_eph5x")]

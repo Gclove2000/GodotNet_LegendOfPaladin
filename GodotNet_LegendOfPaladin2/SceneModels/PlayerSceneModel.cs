@@ -27,7 +27,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         /// <summary>
         /// 跳跃速度
         /// </summary>
-        public const float JUMP_SPEED = -350;
+        public const float JUMP_SPEED = -450;
 
         #endregion
 
@@ -39,7 +39,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
         private Camera2D camera2D;
 
-        public enum AnimationEnum { REST, Idel, Running, Jump, Fall, Land }
+        public enum AnimationEnum { REST, Idel, Running, Jump, Fall, Land, WallSliding }
 
         public AnimationEnum AnimationState { get; private set; }
 
@@ -103,6 +103,12 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
                         AnimationState = AnimationEnum.Fall;
 
                     }
+                    else if (characterBody2D.IsOnWall())
+                    {
+                        AnimationState = AnimationEnum.WallSliding;
+
+                    }
+
                     break;
                 case AnimationEnum.Running:
                     if (Mathf.IsZeroApprox(Direction))
@@ -111,6 +117,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
                     }
                     break;
                 case AnimationEnum.Fall:
+
                     if (Mathf.IsZeroApprox(characterBody2D.Velocity.Y))
                     {
                         AnimationState = AnimationEnum.Land;
@@ -125,9 +132,21 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
                             }
                         });
                     }
+                    else if (characterBody2D.IsOnWall())
+                    {
+                        AnimationState = AnimationEnum.WallSliding;
+
+                    }
                     break;
                 case AnimationEnum.Land:
 
+                    break;
+
+                case AnimationEnum.WallSliding:
+                    if (!characterBody2D.IsOnWall())
+                    {
+                        AnimationState = AnimationEnum.Fall;
+                    }
                     break;
             }
 
@@ -168,9 +187,6 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         /// <param name="rect2"></param>
         public void SetCameraLimit(Rect2 rect2)
         {
-
-
-
             camera2D.LimitLeft = (int)rect2.Position.X;
             //camera2D.LimitTop = (int)rect2.Position.Y;
             camera2D.LimitRight = (int)rect2.End.X;

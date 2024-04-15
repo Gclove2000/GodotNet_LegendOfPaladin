@@ -12,10 +12,23 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
     public class PlayerSceneModel : ISceneModel
     {
         private PrintHelper printHelper;
-
+        #region 常量
+        /// <summary>
+        /// 速度
+        /// </summary>
         public const float RUN_SPEED = 200;
 
+        /// <summary>
+        /// 加速度，为了显示明显，20秒内到达RUN_SPEED的速度
+        /// </summary>
+        public const float ACCELERATION = (float)(RUN_SPEED / 20);
+
+        /// <summary>
+        /// 跳跃速度
+        /// </summary>
         public const float JUMP_SPEED = -350;
+
+        #endregion
 
         private Sprite2D sprite2D;
 
@@ -47,7 +60,10 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
             velocity.Y += ProjectSettingHelper.Gravity * (float)delta;
             var direction = Input.GetAxis(ProjectSettingHelper.InputMapEnum.move_left.ToString(),
                 ProjectSettingHelper.InputMapEnum.move_right.ToString());
-            velocity.X = direction*RUN_SPEED;
+            //原本直接赋值
+            //velocity.X = direction*RUN_SPEED;
+            //现在使用加速度
+            velocity.X = Mathf.MoveToward(velocity.X, direction * RUN_SPEED, ACCELERATION);
             if (characterBody2D.IsOnFloor() && Input.IsActionJustPressed(ProjectSettingHelper.InputMapEnum.jump.ToString()))
             {
                 velocity.Y = JUMP_SPEED;

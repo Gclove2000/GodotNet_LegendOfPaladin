@@ -27,7 +27,12 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         /// <summary>
         /// 跳跃速度
         /// </summary>
-        public const float JUMP_SPEED = -450;
+        public const float JUMP_SPEED = -350;
+
+        /// <summary>
+        /// 蹬墙跳的速度
+        /// </summary>
+        public readonly Vector2 WALL_JUMP_VELOCITY = new Vector2(400, -320);
 
         #endregion
 
@@ -46,6 +51,12 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         public bool IsLand { get; private set; } = true;
 
         public float Direction { get; private set; } = 0;
+        
+        /// <summary>
+        /// 跳跃重置时间
+        /// </summary>
+        public const float JudgeIsJumpTime = 0.5f;
+        private float isJumpTime = 0;
 
         public PlayerSceneModel(PrintHelper printHelper)
         {
@@ -76,12 +87,37 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
             //velocity.X = direction*RUN_SPEED;
             //现在使用加速度
             velocity.X = Mathf.MoveToward(velocity.X, Direction * RUN_SPEED, ACCELERATION);
-
-            if (characterBody2D.IsOnFloor() && Input.IsActionJustPressed(ProjectSettingHelper.InputMapEnum.jump.ToString()))
+            //按下跳跃键，就将跳跃时间设置为判断区间
+            if (Input.IsActionJustPressed(ProjectSettingHelper.InputMapEnum.jump.ToString()))
             {
-                velocity.Y = JUMP_SPEED;
-                AnimationState = AnimationEnum.Jump;
+                isJumpTime = JudgeIsJumpTime;
             }
+            //慢慢变成0
+            isJumpTime = (float)Mathf.MoveToward(isJumpTime,0,delta);
+
+            //如果在跳跃时间的判断内
+            if (isJumpTime != 0)
+            {
+                
+                if (characterBody2D.IsOnFloor())
+                {
+                    //进行跳跃之后，跳跃时间结束
+                    isJumpTime = 0;
+                    velocity.Y = JUMP_SPEED;
+                    AnimationState = AnimationEnum.Jump;
+                }
+                else if (AnimationState == AnimationEnum.WallSliding)
+                {
+                    //进行跳跃之后，跳跃时间结束
+                    isJumpTime = 0;
+                    velocity = WALL_JUMP_VELOCITY;
+                    //获取墙面的法线的方向
+                    velocity.X *= characterBody2D.GetWallNormal().X;
+                    AnimationState = AnimationEnum.Jump;
+
+                }
+            }
+
             characterBody2D.Velocity = velocity;
             characterBody2D.MoveAndSlide();
 

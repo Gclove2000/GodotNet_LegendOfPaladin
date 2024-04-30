@@ -12,10 +12,28 @@ namespace GodotNet_LegendOfPaladin2.SceneScripts
     public partial class EnemyScene : Node2D
     {
 
-        public EnemySceneModel Model { get;private set; }
+
+
+        [Export]
+        public EnemySceneModel.DirectionEnum Direction
+        {
+            get => Model.Direction;
+            set => Model.Direction = value;
+        }
+
+        [Export]
+        public int MaxSpeed = 180;
+        [Export]
+        public int AccelerationSpeed = 2000;
+
+
+        public EnemySceneModel Model { get; private set; }
 
         public EnemyScene()
         {
+            
+            MaxSpeed = 180;
+            AccelerationSpeed = 2000;
             Model = Program.Services.GetService<EnemySceneModel>();
             Model.Scene = this;
         }
@@ -23,6 +41,8 @@ namespace GodotNet_LegendOfPaladin2.SceneScripts
 
         public override void _Ready()
         {
+            Model.MaxSpeed = MaxSpeed;
+            Model.AccelerationSpeed = AccelerationSpeed;
             Model.Ready();
             base._Ready();
         }

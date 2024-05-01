@@ -26,14 +26,15 @@ namespace GodotNet_LegendOfPaladin2.SceneScripts
         [Export]
         public int AccelerationSpeed = 2000;
 
+        [Export(PropertyHint.Range,"1,3,")]
+        public int AnimationType = 1;
 
         public EnemySceneModel Model { get; private set; }
 
         public EnemyScene()
         {
             
-            MaxSpeed = 180;
-            AccelerationSpeed = 2000;
+            
             Model = Program.Services.GetService<EnemySceneModel>();
             Model.Scene = this;
         }
@@ -43,6 +44,7 @@ namespace GodotNet_LegendOfPaladin2.SceneScripts
         {
             Model.MaxSpeed = MaxSpeed;
             Model.AccelerationSpeed = AccelerationSpeed;
+            Model.AnimationType = AnimationType;
             Model.Ready();
             base._Ready();
         }

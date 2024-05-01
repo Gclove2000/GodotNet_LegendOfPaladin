@@ -14,5 +14,7 @@ namespace GodotNet_LegendOfPaladin2.Utils
 
 
         public enum InputMapEnum { move_left,move_right, jump}
+
+        public enum CollisionLayerEnum { Environment,Player,Enemy}
     }
 }

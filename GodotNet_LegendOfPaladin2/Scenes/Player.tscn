@@ -390,6 +390,7 @@ script = ExtResource("1_7s1tt")
 metadata/_edit_horizontal_guides_ = [221.0]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+collision_layer = 2
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
 limit_bottom = 220

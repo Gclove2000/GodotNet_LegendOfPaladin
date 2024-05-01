@@ -14,4 +14,6 @@ script = ExtResource("1_2mofd")
 position = Vector2(50, 182)
 
 [node name="Enemy" parent="." instance=ExtResource("4_eph5x")]
-MaxSpeed = 2
+position = Vector2(362, 37)
+Direction = -1
+AnimationType = 2

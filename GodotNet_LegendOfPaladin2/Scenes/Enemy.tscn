@@ -1,7 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://blkgl3tmxulq2"]
+[gd_scene load_steps=23 format=3 uid="uid://blkgl3tmxulq2"]
 
 [ext_resource type="Script" path="res://SceneScripts/EnemyScene.cs" id="1_5n1c7"]
 [ext_resource type="Texture2D" uid="uid://cs8e123g6lora" path="res://Assets/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Merge/all.png" id="2_t7nkw"]
+[ext_resource type="Script" path="res://GlobalClass/Hitbox.cs" id="3_tpiqv"]
+[ext_resource type="Script" path="res://GlobalClass/Hurtbox.cs" id="4_gupyy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y86mi"]
 size = Vector2(31, 19)
@@ -550,6 +552,15 @@ _data = {
 "RESET": SubResource("Animation_kq6lp")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cq62j"]
+size = Vector2(23, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a51c1"]
+size = Vector2(41, 9)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dwtc0"]
+size = Vector2(30, 24)
+
 [node name="Enemy" type="Node2D"]
 position = Vector2(0, -16)
 script = ExtResource("1_5n1c7")
@@ -559,17 +570,18 @@ AnimationType = 3
 collision_layer = 4
 metadata/_edit_lock_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
-position = Vector2(-2.5, 4.5)
-shape = SubResource("RectangleShape2D_y86mi")
-metadata/_edit_lock_ = true
-
 [node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
 scale = Vector2(-1, 1)
 texture = ExtResource("2_t7nkw")
 hframes = 4
 region_enabled = true
 region_rect = Rect2(0, 0, 192, 32)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+visible = false
+position = Vector2(-2.5, 4.5)
+shape = SubResource("RectangleShape2D_y86mi")
 metadata/_edit_lock_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CharacterBody2D"]
@@ -595,3 +607,24 @@ target_position = Vector2(-128, 0)
 collision_mask = 2
 hit_from_inside = true
 metadata/_edit_lock_ = true
+
+[node name="Hitbox" type="Area2D" parent="CharacterBody2D"]
+collision_layer = 16
+collision_mask = 8
+script = ExtResource("3_tpiqv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Hitbox"]
+position = Vector2(1.5, 3)
+shape = SubResource("RectangleShape2D_cq62j")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="CharacterBody2D/Hitbox"]
+position = Vector2(1.5, 6.5)
+shape = SubResource("RectangleShape2D_a51c1")
+
+[node name="Hurtbox" type="Area2D" parent="CharacterBody2D"]
+visible = false
+script = ExtResource("4_gupyy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Hurtbox"]
+position = Vector2(1, 4)
+shape = SubResource("RectangleShape2D_dwtc0")

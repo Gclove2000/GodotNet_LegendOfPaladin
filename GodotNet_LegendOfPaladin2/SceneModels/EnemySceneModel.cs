@@ -44,7 +44,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
             {
                 if (characterBody2D != null && direction != value)
                 {
-                    printHelper.Debug($"设置朝向,{value}");
+                    //printHelper.Debug($"设置朝向,{value}");
                     var scale = characterBody2D.Scale;
                     //注意反转是X=-1。比如你左反转到右是X=-1，你右又反转到左也是X=-1。不是X=-1就是左，X=1就是右。
                     scale.X = -1;
@@ -143,7 +143,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
                 case AnimationEnum.Idle:
                     if (animationDuration > 2)
                     {
-                        printHelper.Debug("站立时间过长，开始移动");
+                        //printHelper.Debug("站立时间过长，开始移动");
 
                         Animation = AnimationEnum.Walk;
                         animationDuration = 0;
@@ -168,14 +168,14 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
                     {
                         Animation = AnimationEnum.Idle;
                         animationDuration = 0;
-                        printHelper.Debug("开始闲置");
+                        //printHelper.Debug("开始闲置");
                     }
                     break;
                 //跑动不会立刻停下，当持续时间大于2秒后站立发呆
                 case AnimationEnum.Run:
                     if (animationDuration > 2)
                     {
-                        printHelper.Debug("追逐时间到达上限，停止");
+                        //printHelper.Debug("追逐时间到达上限，停止");
 
                         Animation = AnimationEnum.Idle;
                         animationDuration = 0;

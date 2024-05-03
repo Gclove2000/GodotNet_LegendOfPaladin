@@ -12,6 +12,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="SceneModels\.gdignore" />
+    <None Include="Scenes\BackGround.tscn" />
+    <None Include="Scenes\Enemy.tscn" />
+    <None Include="Scenes\Main.tscn" />
+    <None Include="Scenes\Player.tscn" />
     <None Include="Utils\.gdignore" />
   </ItemGroup>
   <ItemGroup>
@@ -22,5 +26,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NLog" Version="5.2.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ModuleScripts\" />
+    <Folder Include="Modules\" />
   </ItemGroup>
 </Project>

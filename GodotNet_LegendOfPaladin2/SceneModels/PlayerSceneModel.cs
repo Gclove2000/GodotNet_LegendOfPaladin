@@ -43,7 +43,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         {
             get => canCombo; set
             {
-                printHelper.Debug($"设置canComBo:{value}");
+                //printHelper.Debug($"设置canComBo:{value}");
                 canCombo = value;
             }
         }
@@ -58,13 +58,81 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
         private Camera2D camera2D;
 
-        public enum AnimationEnum { REST, Idel, Running, Jump, Fall, Land, WallSliding }
+        private bool isComboRequest = false;
 
-        public AnimationEnum AnimationState { get; private set; }
+        public enum AnimationEnum { REST, Idel, Running, Jump, Fall, Land, WallSliding, Attack_1, Attack_2, Attack_3 }
+
+        /// <summary>
+        /// 可以移动的状态
+        /// </summary>
+        public AnimationEnum[] CanMoveAnimation = [
+            AnimationEnum.Idel, AnimationEnum.Running ,AnimationEnum.Fall,AnimationEnum.WallSliding,AnimationEnum.Land
+        ];
+
+        /// <summary>
+        /// 攻击状态
+        /// </summary>
+        public AnimationEnum[] AttactAnimationEnum = [
+                AnimationEnum.Attack_1,AnimationEnum.Attack_2,AnimationEnum.Attack_3,
+            ];
+
+        private AnimationEnum animationEnum = AnimationEnum.Idel;
+        public AnimationEnum AnimationState
+        {
+            get => animationEnum;
+            private set
+            {
+                if (value != animationEnum)
+                {
+                    //printHelper.Debug($"{animationEnum} => {value}");
+                }
+                animationEnum = value;
+            }
+        }
 
         public bool IsLand { get; private set; } = true;
 
-        public float Direction { get; private set; } = 0;
+        private float direction = 0f;
+
+        public float Direction
+        {
+            get => direction;
+            private set
+            {
+                if (!Mathf.IsZeroApprox(Direction))
+                {
+                    //如果不是在攻击状态下，则可以反转
+                    if (!AttactAnimationEnum.Contains(AnimationState))
+                    {
+                        IsFlip = Direction < 0;
+
+                    }
+                }
+
+
+                direction = value;
+            }
+        }
+
+        private bool isFlip = false;
+
+        public bool IsFlip
+        {
+            get => IsFlip;
+            set
+            {
+                if (isFlip != value)
+                {
+                    isFlip = value;
+                    var scale = characterBody2D.Scale;
+                    scale.X = -1;
+                    characterBody2D.Scale = scale;
+                }
+            }
+
+        }
+
+
 
         /// <summary>
         /// 跳跃重置时间
@@ -133,25 +201,38 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
             }
 
             characterBody2D.Velocity = velocity;
-            characterBody2D.MoveAndSlide();
+
+            if (CanMoveAnimation.Contains(AnimationState))
+            {
+                characterBody2D.MoveAndSlide();
+
+            }
 
         }
 
         private void SetAnimation()
         {
+            isComboRequest = Input.IsActionPressed($"{ProjectSettingHelper.InputMapEnum.attack}") && canCombo;
+            //isComboRequest = !Input.IsActionJustReleased(ProjectSettingHelper.InputMapEnum.attack.ToString());
+
+            var isPlaying = animationPlayer.IsPlaying();
             switch (AnimationState)
             {
                 case AnimationEnum.Idel:
-                    if (!Mathf.IsZeroApprox(Direction))
+                    if (Input.IsActionJustPressed($"{ProjectSettingHelper.InputMapEnum.attack}"))
+                    {
+                        AnimationState = AnimationEnum.Attack_1;
+                    }
+                    else if (!Mathf.IsZeroApprox(Direction))
                     {
                         AnimationState = AnimationEnum.Running;
                     }
+
                     break;
                 case AnimationEnum.Jump:
                     if (characterBody2D.Velocity.Y < 0)
                     {
                         AnimationState = AnimationEnum.Fall;
-
                     }
                     else if (characterBody2D.IsOnWall())
                     {
@@ -161,10 +242,15 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
                     break;
                 case AnimationEnum.Running:
-                    if (Mathf.IsZeroApprox(Direction))
+                    if (Input.IsActionJustPressed($"{ProjectSettingHelper.InputMapEnum.attack}"))
+                    {
+                        AnimationState = AnimationEnum.Attack_1;
+                    }
+                    else if (Mathf.IsZeroApprox(Direction))
                     {
                         AnimationState = AnimationEnum.Idel;
                     }
+
                     break;
                 case AnimationEnum.Fall:
 
@@ -198,12 +284,50 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
                         AnimationState = AnimationEnum.Fall;
                     }
                     break;
+                case AnimationEnum.Attack_1:
+
+                    if (isComboRequest && !isPlaying)
+                    {
+                        AnimationState = AnimationEnum.Attack_2;
+                        isComboRequest = false;
+                    }
+                    else if (!isPlaying)
+                    {
+                        AnimationState = AnimationEnum.Idel;
+                    }
+                    break;
+
+                case AnimationEnum.Attack_2:
+                    if (isComboRequest && !isPlaying)
+                    {
+                        AnimationState = AnimationEnum.Attack_3;
+                        isComboRequest = false;
+
+                    }
+                    else if (!isPlaying)
+                    {
+                        AnimationState = AnimationEnum.Idel;
+                    }
+                    break;
+                case AnimationEnum.Attack_3:
+                    if (!isPlaying)
+                    {
+                        AnimationState = AnimationEnum.Idel;
+                    }
+                    break;
             }
 
-            if (!Mathf.IsZeroApprox(Direction))
-            {
-                sprite2D.FlipH = Direction < 0;
-            }
+
+            //如果方向大于0
+            //if (!Mathf.IsZeroApprox(Direction))
+            //{
+            //    //如果不是在攻击状态下，则可以反转
+            //    if (!AttactAnimationEnum.Contains(AnimationState))
+            //    {
+            //        sprite2D.FlipH = Direction < 0;
+
+            //    }
+            //}
             PlayAnimation();
         }
 

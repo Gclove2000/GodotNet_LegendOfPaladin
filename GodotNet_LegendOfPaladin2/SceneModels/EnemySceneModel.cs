@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using Godot;
+using GodotNet_LegendOfPaladin2.GlobalClass;
 using GodotNet_LegendOfPaladin2.Utils;
 using Newtonsoft.Json;
 using System;
@@ -27,6 +28,10 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         public RayCast2D FloorCheck { get; private set; }
 
         public RayCast2D PlayerCheck { get; private set; }
+
+        public Hitbox Hitbox { get; private set; }
+
+        public Hurtbox Hurtbox { get; private set; }
 
         public enum DirectionEnum
         {
@@ -59,7 +64,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
         public enum AnimationEnum
         {
-            Hit, Idle, Run, Walk
+            Hit, Idle, Run, Walk,Die
 
         }
 
@@ -112,10 +117,26 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
             WallCheck = Scene.GetNode<RayCast2D>("CharacterBody2D/RayCast/WallCheck");
             FloorCheck = Scene.GetNode<RayCast2D>("CharacterBody2D/RayCast/FloorCheck");
             PlayerCheck = Scene.GetNode<RayCast2D>("CharacterBody2D/RayCast/PlayerCheck");
+            Hitbox = Scene.GetNode<Hitbox>("CharacterBody2D/Hitbox");
+            Hurtbox = Scene.GetNode<Hurtbox>("CharacterBody2D/Hurtbox");
+            Hurtbox.HurtCallback += Hurtbox_HurtCallback;
+            Hurtbox.DieCallback += Hurtbox_DieCallback;
             PlayAnimation();
             printHelper.Debug("加载成功!");
             printHelper.Debug($"当前朝向是:{Direction}");
             Direction = Direction;
+        }
+
+        private void Hurtbox_DieCallback()
+        {
+            printHelper.Debug("Boar is die");
+            Animation = AnimationEnum.Die;
+        }
+
+        private void Hurtbox_HurtCallback(Hitbox hitbox)
+        {
+            printHelper.Debug($"{hitbox.Owner.Name} [Hit] {Scene.Name} in {hitbox.Damage} damage, Health = {Hurtbox.Health}");
+            Animation = AnimationEnum.Hit;
         }
 
         #region 动画状态机
@@ -179,6 +200,19 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
 
                         Animation = AnimationEnum.Idle;
                         animationDuration = 0;
+                    }
+                    break;
+                case AnimationEnum.Die:
+                    if (!animationPlayer.IsPlaying())
+                    {
+                        Scene.QueueFree();
+                    }
+                    break;
+
+                case AnimationEnum.Hit:
+                    if(!animationPlayer.IsPlaying())
+                    {
+                        Animation = AnimationEnum.Idle;
                     }
                     break;
             }

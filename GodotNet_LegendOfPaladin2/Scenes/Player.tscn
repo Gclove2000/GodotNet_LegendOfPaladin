@@ -673,7 +673,6 @@ region_enabled = true
 region_rect = Rect2(0, 0, 336, 56)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CharacterBody2D"]
-deterministic = true
 root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_sr42c")
@@ -696,6 +695,7 @@ shape = SubResource("RectangleShape2D_ga0v5")
 
 [node name="Hitbox" type="Area2D" parent="CharacterBody2D"]
 script = ExtResource("3_1ttfn")
+Damage = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Hitbox"]
 position = Vector2(15, -17)

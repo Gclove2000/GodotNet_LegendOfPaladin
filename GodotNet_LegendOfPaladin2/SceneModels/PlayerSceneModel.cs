@@ -1,4 +1,5 @@
 ﻿using Godot;
+using GodotNet_LegendOfPaladin2.GlobalClass;
 using GodotNet_LegendOfPaladin2.Utils;
 using Newtonsoft.Json;
 using System;
@@ -91,6 +92,11 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         }
 
         public bool IsLand { get; private set; } = true;
+
+
+        public Hitbox Hitbox { get; set; }
+
+        public Hurtbox Hurtbox { get; set; }
 
         private float direction = 0f;
 
@@ -350,6 +356,8 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
             camera2D = characterBody2D.GetNode<Camera2D>("Camera2D");
             sprite2D = characterBody2D.GetNode<Sprite2D>("Sprite2D");
             animationPlayer = characterBody2D.GetNode<AnimationPlayer>("AnimationPlayer");
+            Hitbox = Scene.GetNode<Hitbox>("CharacterBody2D/Hitbox");
+            Hurtbox = Scene.GetNode<Hurtbox>("CharacterBody2D/Hurtbox");
             printHelper.Debug("加载完成");
             AnimationState = AnimationEnum.Idel;
             PlayAnimation();

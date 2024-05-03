@@ -34,6 +34,20 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         /// </summary>
         public readonly Vector2 WALL_JUMP_VELOCITY = new Vector2(400, -320);
 
+        private bool canCombo = false;
+
+        /// <summary>
+        /// 是否能够连击
+        /// </summary>
+        public bool CanCombo
+        {
+            get => canCombo; set
+            {
+                printHelper.Debug($"设置canComBo:{value}");
+                canCombo = value;
+            }
+        }
+
         #endregion
 
         private Sprite2D sprite2D;
@@ -51,7 +65,7 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
         public bool IsLand { get; private set; } = true;
 
         public float Direction { get; private set; } = 0;
-        
+
         /// <summary>
         /// 跳跃重置时间
         /// </summary>
@@ -93,12 +107,12 @@ namespace GodotNet_LegendOfPaladin2.SceneModels
                 isJumpTime = JudgeIsJumpTime;
             }
             //慢慢变成0
-            isJumpTime = (float)Mathf.MoveToward(isJumpTime,0,delta);
+            isJumpTime = (float)Mathf.MoveToward(isJumpTime, 0, delta);
 
             //如果在跳跃时间的判断内
             if (isJumpTime != 0)
             {
-                
+
                 if (characterBody2D.IsOnFloor())
                 {
                     //进行跳跃之后，跳跃时间结束

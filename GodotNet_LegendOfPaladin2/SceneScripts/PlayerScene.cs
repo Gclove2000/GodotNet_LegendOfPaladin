@@ -9,10 +9,20 @@ using System.Threading.Tasks;
 
 namespace GodotNet_LegendOfPaladin2.SceneScripts
 {
-    public partial class PlayerScene :Node2D
+    public partial class PlayerScene : Node2D
     {
 
         public PlayerSceneModel Model { get; set; }
+
+        [Export]
+        public bool CanCombo
+        {
+            get => Model.CanCombo;
+            set { Model.CanCombo = value; }
+        }
+
+
+
 
         public PlayerScene()
         {
@@ -23,13 +33,13 @@ namespace GodotNet_LegendOfPaladin2.SceneScripts
         public override void _Ready()
         {
             Model.Ready();
-            base._Ready();  
+            base._Ready();
         }
 
         public override void _Process(double delta)
         {
             Model.Process(delta);
-            base._Process(delta);   
+            base._Process(delta);
         }
     }
 }

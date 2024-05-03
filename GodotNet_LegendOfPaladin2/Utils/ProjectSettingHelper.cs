@@ -13,7 +13,7 @@ namespace GodotNet_LegendOfPaladin2.Utils
         public const int Gravity = 980;
 
 
-        public enum InputMapEnum { move_left,move_right, jump}
+        public enum InputMapEnum { move_left,move_right, jump,attack}
 
         public enum CollisionLayerEnum { Environment,Player,Enemy}
     }
